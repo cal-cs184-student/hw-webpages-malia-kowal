@@ -28,7 +28,7 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Name: Malia Kowal</div>
 
 		<br>
 
@@ -48,10 +48,10 @@
 		-->
 
 		<h2>Overview</h2>
-		In this assignment I have implemented a rasterizer that is able to take in svg files containing triangles and color information and rasterize that into a 2D image on the screen. I also implement multiple filtering and texture options that allow the user to change the appearance of the image. The most interesting part of this assignment was dealing with floating point discrepancies. I spent a lot of time debugging issues related to this and was surprised to learn that adding a small offset can fix many of these problems. 
+		In this assignment, I have implemented a rasterizer that is able to take in svg files containing triangles and color information and rasterize that into a 2D image on the screen. I also implement multiple filtering and texture options that allow the user to change the appearance of the image. The most interesting part of this assignment was dealing with floating point discrepancies. I spent a lot of time debugging issues related to this and was surprised to learn that adding a small offset can fix many of these problems. 
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		I implemented the Point-In-Triangle test. I created lambda functions for L0, L1, and L2 and passed in the (x, y) of the triangle corners 0, 1, and 2. Then, I iterated through all of the points in a bounding box around the corners of the triangle. I checked if each point (with a 0.5f offset in the x and y directions) was inside the triangle by determining if L0, L1, and L2 were all >= 0. If the point is inside the triangle, I rasterize the point with the assigned color. 
+		I implemented the Point-In-Triangle test. I created lambda functions for each L<sub>i</sub> and passed in the (x, y) coordinates of each triangle corner. Then, I iterated through all of the points in a bounding box around the corners of the triangle. I checked if each point (with a 0.5f offset in the x and y directions) was inside the triangle by determining if each L<sub>i</sub> was <code>>=</code> 0. If the point is inside the triangle, I rasterize the point with the assigned color. 
 
 		My algorithm is no worse than one that checks each sample within the bounding box because it iterates through only the points within the bounding box of the triangle. 
 
@@ -60,34 +60,8 @@
 			<!-- <figcaption>Task 1: Rasterized Triangle with some aliasing </figcaption> -->
 		</figure>
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
-		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		For supersampling, inside of the rasterize_triangle, I find the size of the jump between each sample with 1 / (sqrt(sample_rate) and iterate through 0 to sqrt(sample_rate) in the x (j) and y (i) directions. I then checked if each point was inside the triangle by taking the bounding box point and offsetting it by the (number of samples in the x or y direction + 0.5) * the size of the jump for a given sample rate. If the point was inside the triangle, I stored the point in the sample buffer. The sample buffer was the size of the frame buffer * sample rate. I stored all of the sample points in the sample buffer in consecutive order, so all samples for point (x, y) would be at sample_buffer[((y * width + x) * sample_rate): ((y * width + x) * (sample_rate + 1)]. 
+		For supersampling, inside of the rasterize_triangle, I find the size of the jump between each sample with <code>1 / (sqrt(sample_rate))</code> and iterate through 0 to <code>sqrt(sample_rate)</code> in the x (j) and y (i) directions. I then checked if each point was inside the triangle by taking the (x, y) coordinate and offsetting it by the (number of samples in the x or y direction + 0.5) * the size of the jump for a given sample rate. If the point was inside the triangle, I stored the point in the sample buffer. The sample buffer was the size of the frame buffer * sample rate. I stored all of the sample points in the sample buffer in consecutive order, so all samples for point (x, y) would be at sample_buffer[((y * width + x) * sample_rate): ((y * width + x) * (sample_rate + 1)). 
 
 		To resolve to the frame buffer, I iterated through each point in the framebuffer and averaged the r, g, and b values of all of the sample points stored for that point in the sample buffer before placing them in the frame buffer.
 
