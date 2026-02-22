@@ -54,10 +54,10 @@
 		I implemented the Point-In-Triangle test. I created lambda functions for L0, L1, and L2 and passed in the (x, y) of the triangle corners 0, 1, and 2. Then, I iterated through all of the points in a bounding box around the corners of the triangle. I checked if each point (with a 0.5f offset in the x and y directions) was inside the triangle by determining if L0, L1, and L2 were all >= 0. If the point is inside the triangle, I rasterize the point with the assigned color. 
 
 		My algorithm is no worse than one that checks each sample within the bounding box because it iterates through only the points within the bounding box of the triangle. 
-		
+
 		<figure>
 			<img src="task2_1.png" alt="Task1" style="width:50%"/>
-			<figcaption>Task 1: Rasterized Triangle with some aliasing </figcaption>
+			<!-- <figcaption>Task 1: Rasterized Triangle with some aliasing </figcaption> -->
 		</figure>
 
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
@@ -87,25 +87,109 @@
 		</div>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		For supersampling, inside of the rasterize_triangle, I find the size of the jump between each sample with 1 / (sqrt(sample_rate) and iterate through 0 to sqrt(sample_rate) in the x (j) and y (i) directions. I then checked if each point was inside the triangle by taking the bounding box point and offsetting it by the (number of samples in the x or y direction + 0.5) * the size of the jump for a given sample rate. If the point was inside the triangle, I stored the point in the sample buffer. The sample buffer was the size of the frame buffer * sample rate. I stored all of the sample points in the sample buffer in consecutive order, so all samples for point (x, y) would be at sample_buffer[((y * width + x) * sample_rate): ((y * width + x) * (sample_rate + 1)]. 
+
+		To resolve to the frame buffer, I iterated through each point in the framebuffer and averaged the r, g, and b values of all of the sample points stored for that point in the sample buffer before placing them in the frame buffer.
+
+		Super sampling is helpful because it avoids the aliasing that can happen at low sampling rates. By averaging multiple values in a point rather than sampling only one, there are less jaggies and smoother transitions.
 
 		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		The cubeman is waving at the viewer and has a blue head.
+		<figure>
+			<img src="task3.png" alt="cubeman" style="width:50%"/>
+			<!-- <figcaption>You can add images with captions!</figcaption> -->
+		</figure>
 
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Barycentric coordinates describe the position of a point within a triangle with respect to the distance between the point and a corner of the triangle. Alpha, beta, and gamma represent the fraction of the distance between a triangle corner and the opposite edge at which the point is located. For example, in the image, the points at the center of the edges are a perfect mix of red/blue, green/blue, and red/blue because they are directly in between two colors and at a fraction of 0 from the third color. 
+		<figure>
+			<img src="task4_1.png" alt="triangle" style="width:50%"/>
+			<!-- <figcaption>Circle with b</figcaption> -->
+		</figure>
+		<figure>
+			<img src="task4_2.png" alt="circle" style="width:50%"/>
+			<!-- <figcaption>Circle with b</figcaption> -->
+		</figure>
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Pixel sampling is the process of converting between the coordinate space of one image to a different one. In the context of texture mapping, this involved converting the (x, y) coordinates of a screen space to the (u, v) coordinates of the corresponding pixel in texture space and sampling that pixel. I implemented this by computing the barycentric coefficients alpha, beta, and gamma for the (x, y) coordinates of every point and using this to calculate the sample of the color the corresponding texel, which is found with barycentric interpolation of u and v. 
+
+		For nearest neighbor sampling, the closest texel to the interpolated point is used to color the pixel. For bilinear interpolation sampling, the color of the pixel is found by taking a weighted average of the 4 surrounding texels based on the position of the point within that square.
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task5_1.png" width="400px"/>
+				  <figcaption>Nearest neighbor sampling</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5_2.png" width="400px"/>
+				  <figcaption>Bilinear interpolation sampling</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task5_near.png" width="400px"/>
+				  <figcaption>Nearest neighbor + sample_rate = 1</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5_biline.png" width="400px"/>
+				  <figcaption>Bilinear interpolation + sample_rate = 1</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task5_near_16.png" width="400px"/>
+				  <figcaption>Nearest neighbor + sample_rate = 16</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task5_biline_16.png" width="400px"/>
+				  <figcaption>Bilinear interpolation + sample_rate = 16</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		Bilinear interpolation had the most noticeable impact. The smoothing effect had greatly reduced the number of jaggies, while the sampling_rate had a minimal effect. These effects will be noticeable for high frequency shapes as the aliasing caused by a low sampling frequency will be more pronounced. Also, when the texture is being magnified, the smoothing of the bilinear interpolation will be much more obvious because the nearest neighbor will result in a more blocky image. 
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Level sampling is the process of selecting texels from a variety of mip-levels. To implement this, I first implemented get_level, which calculates the partial derivatives of uv with respect to x and y and takes the binary logarithm of the max length of those two vectors. For L_ZERO, I simply sampled the zeroth mipmap level of the texture. For L_NEAREST, I rounded the float returned by get_level and sampled that level. For L_LINEAR, I sampled both the closest mip-level above  and below the ideal mip-level and took the weighted average of the two based on the distance the mip-level float was between them.  
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6_2.png" width="400px"/>
+				  <figcaption>L_ZERO + P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6_3.png" width="400px"/>
+				  <figcaption>L_ZERO + P_LINEAR</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task6_4.png" width="400px"/>
+				  <figcaption>L_NEAREST + P_NEAREST</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="task6_5.png" width="400px"/>
+				  <figcaption>L_NEAREST + P_LINEAR</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
+
+		<!-- <h2>Additional Notes (please remove)</h2> -->
+		<!-- <ul>
 			<li>You can also add code if you'd like as so: <code>code code code</code></li>
 			<li>If you'd like to add math equations, 
 				<ul>
@@ -113,7 +197,7 @@
 					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
 				</ul>
 			</li>
-		</ul>
+		</ul> -->
 		</div>
 	</body>
 </html>
