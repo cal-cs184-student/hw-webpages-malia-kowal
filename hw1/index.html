@@ -67,6 +67,32 @@
 
 		Super sampling is helpful because it avoids the aliasing that can happen at low sampling rates. By averaging multiple values in a point rather than sampling only one, there are less jaggies and smoother transitions.
 
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task2_1.png" width="400px"/>
+				  <!-- <figcaption>Nearest neighbor + sample_rate = 1</figcaption> -->
+				</td>
+				<td style="text-align: center;">
+				  <img src="task2_2.png" width="400px"/>
+				  <!-- <figcaption>Bilinear interpolation + sample_rate = 1</figcaption> -->
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="task2_3.png" width="400px"/>
+				  <!-- <figcaption>Nearest neighbor + sample_rate = 16</figcaption> -->
+				</td>
+				<td style="text-align: center;">
+				  <img src="task2_4.png" width="400px"/>
+				  <!-- <figcaption>Bilinear interpolation + sample_rate = 16</figcaption> -->
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+
 		<h2>Task 3: Transforms</h2>
 		The cubeman is waving at the viewer and has a blue head.
 		<figure>
