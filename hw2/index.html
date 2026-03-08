@@ -48,52 +48,127 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
-
+		In this assignment, I implemented methods for manipulating half-edge data structures and for displaying them with a smoother appearance. I learned how important it is to be meticulous with these data structures and the benefit of careful planning before implementation. 
+		
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		De Casteljau's is a method of using repeated linear interpolations between a set of points to create a smoother curve. The value of the parameter used in the algorithm determines where along the linear interpolation the sample should be taken. I implemented it by iterating through each point in the provided set and taking the linear interpolation of p[i] and p[i+1] to create a new set of points. 
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+
+		<figure>
+			<img src="hw2/Screenshot 2026-03-07 at 3.00.32 PM.png" alt="curve" style="width:50%"/>
+			<figcaption>Bezier Curve</figcaption>
+		</figure>
+
+		<!-- <p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p> -->
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
+				  <img src="hw2/Screenshot 2026-03-07 at 3.01.36 PM.png" width="400px"/>
+				  <!-- <figcaption>1</figcaption> -->
+				</td>
+				<td style="text-align: center;">
+				  <img src="hw2/Screenshot 2026-03-07 at 3.01.41 PM.png" width="400px"/>
+				  <!-- <figcaption>Caption goes here.</figcaption> -->
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="hw2/Screenshot 2026-03-07 at 3.01.45 PM.png" width="400px"/>
 				  <figcaption>Caption goes here.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
+				  <img src="hw2/Screenshot 2026-03-07 at 3.01.49 PM.png" width="400px"/>
 				  <figcaption>Caption goes here.</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
+				  <img src="hw2/Screenshot 2026-03-07 at 3.01.52 PM.png" width="400px"/>
 				  <figcaption>Caption goes here.</figcaption>
 				</td>
+			  </tr>
+			  <td style="text-align: center;">
+				<img src="hw2/Screenshot 2026-03-07 at 3.02.29 PM.png" width="400px"/>
+				<figcaption>Caption goes here.</figcaption>
+			  </td>
+			</table>
+		</div>
+
+		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
+		De Casteljau's algorithm extends to Bezier surfaces by being applied in 2 directions. First, a Bezier curve is made from every column in the surface matrix. From there, each curve is evaluated at a point using the first parameter. From these new points, another bezier curve is made and is evaluated to find the final point with the second parameter. 
+
+		<figure>
+			<img src="hw2/Screenshot 2026-03-07 at 3.15.05 PM.png" alt="curve" style="width:50%"/>
+			<figcaption>Bezier Curve</figcaption>
+		</figure>
+
+		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+
+		<h3>Part 3: Area-weighted vertex normals</h3>
+		I implemented area-weighted vertex normals by iterating through each face touching the vertex and taking the cross product of the vectors made by these points. I then returned the average of each of these normals. I iterated through all of the faces by going to the halfedge's next()->next()->twin(), which would be the halfedge of the next triangle over from the starting one. 
+		
+		<figure>
+			<img src="hw2/Screenshot 2026-03-07 at 3.22.52 PM.png" alt="curve" style="width:50%"/>
+			<figcaption>Phong Shading</figcaption>
+		</figure>
+		<figure>
+			<img src="hw2/Screenshot 2026-03-07 at 3.23.03 PM.png" alt="curve" style="width:50%"/>
+			<figcaption>Default Flat Shading</figcaption>
+		</figure>
+
+		<h3>Part 4: Edge flip</h3>
+		I implemented the edge flip operation by first checking if the edge was a boundary, and exiting if so. I then collected all of the related halfedges, edges, and vertices. Next, I reassigned all of the neighbors for each halfedge. Using the diagram in the assignment spec, I changed the halfedge from b->c to a->d and changed the halfedge from c->b to d->a. The face associated with halfedge b->c  became the face for a, c, and d. The face associated with halfedge c->b became the face for a, b, and d. Finally, I made sure that all of the vertices and faces were pointing to the newly assigned halfedges. The main trick that I used was to draw every vertex, face, and edge with labels that I then used as variable names in the implementation. 
+		
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
 				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="hw2/Screenshot 2026-03-07 at 3.35.40 PM.png" width="400px"/>
+				  <figcaption>Original</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="hw2/Screenshot 2026-03-07 at 3.39.01 PM.png" width="400px"/>
+				  <figcaption>Some Flipped Edges</figcaption>
 				</td>
 			  </tr>
 			</table>
 		</div>
 
-		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
-
-		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
 		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		I implemented the edge split by first collecting all of the existing halfedges, vertices, and faces. I then started by making the new vertex m, which had the averaged position of b and c. Next, I made 6 new halfedges, 3 new edges, and 2 new faces. Then, I assign all halfedges to their related neighbors. I opted for the original edge to be associated with m->b and b->m. All assignments were made according to the diagram below. Finally, I assigned all vertices, faces, and edges to their corresponding halfedges. 
+		<figure>
+			<img src="hw2/Cs 184 Hw 2.png" alt="curve" style="width:50%"/>
+			<figcaption>Diagram of Edge  Split Labels</figcaption>
+		</figure>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="hw2/Screenshot 2026-03-07 at 3.35.40 PM.png" width="400px"/>
+				  <figcaption>Original</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="hw2/Screenshot 2026-03-07 at 4.14.03 PM.png" width="400px"/>
+				  <figcaption>Some Splits</figcaption>
+				</td>
+			  </tr>
+			</table>
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+				  <td style="text-align: center;">
+					<img src="hw2/Screenshot 2026-03-07 at 4.12.46 PM.png" width="400px"/>
+					<figcaption>Original</figcaption>
+				  </td>
+				  <td style="text-align: center;">
+					<img src="hw2/Screenshot 2026-03-07 at 4.24.15 PM.png" width="400px"/>
+					<figcaption>Some Splits + Flips</figcaption>
+				  </td>
+				</tr>
+			  </table>
+		</div>
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
