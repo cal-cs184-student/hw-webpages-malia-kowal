@@ -55,9 +55,8 @@
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
 		De Casteljau's is a method of using repeated linear interpolations between a set of points to create a smoother curve. The value of the parameter used in the algorithm determines where along the linear interpolation the sample should be taken. I implemented it by iterating through each point in the provided set and taking the linear interpolation of p[i] and p[i+1] to create a new set of points. 
 
-
 		<figure>
-			<img src="hw2/Screenshot 2026-03-07 at 3.00.32 PM.png" alt="curve" style="width:50%"/>
+			<img src="bezier.png" alt="curve" style="width:50%"/>
 			<figcaption>Bezier Curve</figcaption>
 		</figure>
 
@@ -66,34 +65,34 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.01.36 PM.png" width="400px"/>
+				  <img src="bezier1.png" width="400px"/>
 				  <!-- <figcaption>1</figcaption> -->
 				</td>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.01.41 PM.png" width="400px"/>
+				  <img src="bezier2.png" width="400px"/>
 				  <!-- <figcaption>Caption goes here.</figcaption> -->
 				</td>
+				<td style="text-align: center;">
+					<img src="bezier3.png" width="400px"/>
+					<!-- <figcaption>Caption goes here.</figcaption> -->
+				  </td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.01.45 PM.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="bezier4.png" width="400px"/>
+				  <!-- <figcaption>Caption goes here.</figcaption> -->
 				</td>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.01.49 PM.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
+					<img src="bezier5.png" width="400px"/>
+					<!-- <figcaption>Caption goes here.</figcaption> -->
+				  </td>
 			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.01.52 PM.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
+			  <figure>
 			  <td style="text-align: center;">
-				<img src="hw2/Screenshot 2026-03-07 at 3.02.29 PM.png" width="400px"/>
-				<figcaption>Caption goes here.</figcaption>
+				<img src="bezier_shift.png" width="400px"/>
+				<!-- <figcaption>Caption goes here.</figcaption> -->
 			  </td>
+			  </figure>
 			</table>
 		</div>
 
@@ -101,8 +100,8 @@
 		De Casteljau's algorithm extends to Bezier surfaces by being applied in 2 directions. First, a Bezier curve is made from every column in the surface matrix. From there, each curve is evaluated at a point using the first parameter. From these new points, another bezier curve is made and is evaluated to find the final point with the second parameter. 
 
 		<figure>
-			<img src="hw2/Screenshot 2026-03-07 at 3.15.05 PM.png" alt="curve" style="width:50%"/>
-			<figcaption>Bezier Curve</figcaption>
+			<img src="part2.png" alt="curve" style="width:50%"/>
+			<figcaption>Bezier Surface</figcaption>
 		</figure>
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
@@ -111,11 +110,11 @@
 		I implemented area-weighted vertex normals by iterating through each face touching the vertex and taking the cross product of the vectors made by these points. I then returned the average of each of these normals. I iterated through all of the faces by going to the halfedge's next()->next()->twin(), which would be the halfedge of the next triangle over from the starting one. 
 		
 		<figure>
-			<img src="hw2/Screenshot 2026-03-07 at 3.22.52 PM.png" alt="curve" style="width:50%"/>
+			<img src="part3_phong.png" alt="curve" style="width:50%"/>
 			<figcaption>Phong Shading</figcaption>
 		</figure>
 		<figure>
-			<img src="hw2/Screenshot 2026-03-07 at 3.23.03 PM.png" alt="curve" style="width:50%"/>
+			<img src="part3_default.png" alt="curve" style="width:50%"/>
 			<figcaption>Default Flat Shading</figcaption>
 		</figure>
 
@@ -126,11 +125,11 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.35.40 PM.png" width="400px"/>
+				  <img src="part4_original.png" width="400px"/>
 				  <figcaption>Original</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.39.01 PM.png" width="400px"/>
+				  <img src="part4_flips.png" width="400px"/>
 				  <figcaption>Some Flipped Edges</figcaption>
 				</td>
 			  </tr>
@@ -140,18 +139,18 @@
 		<h3>Part 5: Edge split</h3>
 		I implemented the edge split by first collecting all of the existing halfedges, vertices, and faces. I then started by making the new vertex m, which had the averaged position of b and c. Next, I made 6 new halfedges, 3 new edges, and 2 new faces. Then, I assign all halfedges to their related neighbors. I opted for the original edge to be associated with m->b and b->m. All assignments were made according to the diagram below. Finally, I assigned all vertices, faces, and edges to their corresponding halfedges. 
 		<figure>
-			<img src="hw2/Cs 184 Hw 2.png" alt="curve" style="width:50%"/>
+			<img src="diagram.png" alt="curve" style="width:50%"/>
 			<figcaption>Diagram of Edge  Split Labels</figcaption>
 		</figure>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 3.35.40 PM.png" width="400px"/>
+				  <img src="part5_original.png" width="400px"/>
 				  <figcaption>Original</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="hw2/Screenshot 2026-03-07 at 4.14.03 PM.png" width="400px"/>
+				  <img src="part5_splits.png" width="400px"/>
 				  <figcaption>Some Splits</figcaption>
 				</td>
 			  </tr>
@@ -159,11 +158,11 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 				<tr>
 				  <td style="text-align: center;">
-					<img src="hw2/Screenshot 2026-03-07 at 4.12.46 PM.png" width="400px"/>
+					<img src="part5_original.png" width="400px"/>
 					<figcaption>Original</figcaption>
 				  </td>
 				  <td style="text-align: center;">
-					<img src="hw2/Screenshot 2026-03-07 at 4.24.15 PM.png" width="400px"/>
+					<img src="part5_splits_flips.png" width="400px"/>
 					<figcaption>Some Splits + Flips</figcaption>
 				  </td>
 				</tr>
@@ -171,21 +170,8 @@
 		</div>
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. -->
 
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
